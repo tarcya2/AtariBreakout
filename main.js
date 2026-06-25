@@ -6,12 +6,15 @@ let cols =8;
 let brickWidth = 60;
 let brickHeight = 20;
 let spacing = 5;
+let score = 0;
+let lives = 3;
+let gameState = "serve";
 
 function setup(){
     createCanvas(600, 600);
     ball = {
         x: width/2,
-        y: height/2,
+        y: height/2 +20,
         r: 10,
         vx: 0,
         vy: 0
@@ -29,6 +32,14 @@ function setup(){
 
 function draw(){
     background(0);
+
+    fill(255);
+    textSize(16);
+    text("Score: " + score, 20, 20);
+
+    text("Lives: " + lives, 20, 40);
+
+    text("Clique para lançar a bola", width/2 - 100, height/2);
 
      // Tijolos na tela
     for (let i = 0; i< bricks.length; i++){
@@ -64,7 +75,18 @@ function draw(){
         ball.vx = diff * 0.1
     }
 
-   
+    // Colisão com os tijolos
+    for (let i = bricks.length - 1; i >= 0; i-- ){
+        let b = bricks[i];
+        if (ball.x +  ball.r > b.x && ball.x - ball.r < b.x + b.w && ball.y + ball.r > b.y && ball.y - ball.r < b.y + b.h){
+            ball.vy *= -1
+
+            score += 5;
+            bricks.splice(i, 1);
+            break;
+        }
+    }
+
 }
 
 function mousePressed() {
